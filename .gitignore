@@ -1,0 +1,37 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.pyo
+
+# Virtual environments
+.venv/
+venv/
+env/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Models (downloaded on first run)
+models/*.task
+models/*.tflite
+
+# Audio cache and config (generated at runtime)
+assets/_alarm_clip*.wav
+assets/config.json
+assets/default_alarm.wav
+assets/posture_warning.wav
+assets/break_warning.wav
+
+# OS
+Thumbs.db
+Desktop.ini
+.DS_Store
+
+# Distribution
+dist/
+build/
+*.egg-info/
