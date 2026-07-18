@@ -64,19 +64,22 @@ class PomodoroTimer:
         self._deadline = None
 
     def set_durations(self, work_minutes: int, break_minutes: int) -> None:
+        old_work_sec = self.work_sec
+        old_break_sec = self.break_sec
+        
         self.work_sec = max(1, int(work_minutes)) * 60
         self.break_sec = max(1, int(break_minutes)) * 60
+        
         if self.phase == PomodoroPhase.IDLE:
             self.remaining_sec = self.work_sec
-        elif self.phase == PomodoroPhase.WORK and not self.running:
-            self.remaining_sec = self.work_sec
-        elif self.phase == PomodoroPhase.BREAK and not self.running:
-            self.remaining_sec = self.break_sec
-        if self.running and self._deadline is not None:
-            total = self.work_sec if self.phase == PomodoroPhase.WORK else self.break_sec
-            elapsed = total - self.remaining_sec
-            self.remaining_sec = max(0, total - elapsed)
-            self._deadline = time.monotonic() + self.remaining_sec
+        else:
+            old_total = old_work_sec if self.phase == PomodoroPhase.WORK else old_break_sec
+            new_total = self.work_sec if self.phase == PomodoroPhase.WORK else self.break_sec
+            elapsed = old_total - self.remaining_sec
+            self.remaining_sec = max(0, new_total - elapsed)
+            
+            if self.running and self._deadline is not None:
+                self._deadline = time.monotonic() + self.remaining_sec
 
     def skip_to_break(self) -> None:
         self.phase = PomodoroPhase.BREAK
